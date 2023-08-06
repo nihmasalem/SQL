@@ -1,0 +1,42 @@
+--Create a clothing store database
+CREATE TABLE ClothingStore (id INTEGER PRIMARY KEY, name TEXT, price INTEGER, color TEXT, quantity INTEGER);
+
+INSERT INTO ClothingStore VALUES (1, "Long Pants", 15.99, "blue", 35);
+
+INSERT INTO ClothingStore VALUES (2, "Shorts", 10.99, "black", 27);
+
+INSERT INTO ClothingStore VALUES (3, "Long Maxi Skirt", 19.99, "black", 46);
+
+INSERT INTO ClothingStore VALUES (4, "Long Maxi Skirt", 24.99, "beige", 156);
+
+INSERT INTO ClothingSTORE VALUES (5, "Blouse", 19.99, "white", 92);
+
+INSERT INTO ClothingStore VALUES (6, "Blouse", 19.99, "beige", 56);
+
+INSERT INTO ClothingStore VALUES (7, "Jacket", 29.99, "pink", 100);
+
+INSERT INTO ClothingStore VALUES (8, "Jacket", 29.99, "light blue", 95);
+
+INSERT INTO ClothingStore VALUES (9, "T-shirt", 14.99, "white", 50);
+
+INSERT INTO ClothingStore VALUES (10, "long dress", 49.99, "red", 87);
+
+INSERT INTO ClothingStore VALUES (11, "short dress", 24.99, "grey", 77);
+
+INSERT INTO ClothingStore VALUES (12, "leggings", 15.99, "green", 62);
+
+INSERT INTO ClothingStore VALUES (13, "scarf", 9.99, "beige", 27);
+
+INSERT INTO ClothingStore VALUES (14, "flowy dress", 34.99, "pink", 45);
+
+INSERT INTO ClothingStore VALUES (15, "socks", 4.99, "black", 20);
+
+--display the database ordered by price.
+SELECT * FROM ClothingStore;
+SELECT * FROM ClothingStore ORDER BY price asc;
+
+--displact the total number of items/stock in the store
+SELECT sum(quantity) FROM ClothingStore;
+
+--what is the avg price of items in the store? 
+SELECT AVG(price) FROM ClothingStore;
