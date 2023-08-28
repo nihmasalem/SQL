@@ -1,0 +1,141 @@
+#In this SQL, I'm querying a database with multiple tables in it to answer questions.
+
+--1. Here I am querying for Customers (their full names, customer ID, and country) who are not in the US.
+SELECT CustomerId, FirstName, LastName, Country
+FROM chinook.customers
+WHERE Country <> 'USA';
+
+--2. Here I am querying only the Customers from Brazil.
+SELECT CustomerId, FirstName, LastName, Country
+FROM chinook.customers
+WHERE Country = 'Brazil';
+
+--3. Here I am finding the Invoices of customers who are from Brazil. The resulting table should show the customer's full name, Invoice ID, Date of the invoice, and billing country.
+SELECT customers.FirstName, customers.LastName,invoices.InvoiceId, invoices.InvoiceDate,
+invoices.BillingCountry
+FROM chinook.customers
+JOIN chinook.invoices
+ON customers.CustomerId = invoices.CustomerId
+WHERE Country = 'Brazil';
+
+--4. The following query will show the Employees who are Sales Agents.
+SELECT * FROM employees
+WHERE Title LIKE "%Sales%Agent%"
+
+--5. The following will show a unique/distinct list of billing countries from the Invoice table.
+SELECT DISTINCT BillingCountry FROM chinook.invoices
+ORDER BY BillingCountry;
+
+--6. The following query shows the invoices associated with each sales agent. The resulting table should include the Sales Agent's full name.
+SELECT invoices.InvoiceId, employees.FirstName, employees.LastName, employees.Title FROM chinook.customers
+LEFT JOIN chinook.employees
+ON customers.SupportRepId = employees.EmployeeId
+JOIN chinook.invoices
+ON invoices.CustomerId = customers.CustomerId
+WHERE employees.Title LIKE "%Sales%Agent%"
+ORDER BY employees.LastName;
+
+--7. The following query shows the Invoice Total, Customer name, Country, and Sales Agent name for all invoices and customers.
+SELECT invoices.InvoiceId, invoices.Total, customers.FirstName AS 'Customer FirstName',
+customers.LastName AS 'Customer LastName', invoices.BillingCountry,
+employees.FirstName AS 'Employee FirstName',
+employees.LastName AS 'Employee LastName', employees.Title FROM chinook.customers
+LEFT JOIN chinook.employees
+ON customers.SupportRepId = employees.EmployeeId
+JOIN chinook.invoices
+ON invoices.CustomerId = customers.CustomerId
+WHERE employees.Title LIKE "%Sales%Agent%"
+ORDER BY invoices.InvoiceId;
+
+--8. The following query shows many Invoices there were in 2009?
+SELECT COUNT(*) FROM invoices
+WHERE InvoiceDate LIKE "2009%";
+
+--9. The following shows what are the total sales for 2009?
+SELECT SUM(Total) FROM invoices
+WHERE InvoiceDate LIKE "2009%";
+
+--10. The following is a query that includes the purchased track name with each invoice line ID.
+SELECT invoice_items.InvoiceLineId, tracks.Name AS 'Purchased Track Name' FROM invoice_items
+LEFT JOIN tracks
+ON tracks.TrackId = invoice_items.TrackId
+GROUP BY InvoiceLineId;
+
+--11. The following is a query that includes the purchased track name AND artist name with each invoice line ID.
+SELECT invoice_items.InvoiceLineId, tracks.Name AS 'Purchased Track Name',
+artists.Name AS 'Artist Name' FROM invoice_items
+LEFT JOIN tracks
+ON tracks.TrackId = invoice_items.TrackId
+LEFT JOIN albums
+ON tracks.AlbumId = albums.AlbumId
+LEFT JOIN Artists
+ON artists.ArtistId = albums.ArtistId
+GROUP BY InvoiceLineId;
+
+--12. The following is a query that shows all the Tracks, and include the Album name, Media type, and Genre.
+SELECT tracks.TrackId, tracks.Name AS 'Track Name',
+albums.Title AS 'Album Name', media_types.Name AS 'Media Type Name',
+genres.Name AS 'Genre' FROM tracks
+LEFT JOIN albums
+ON tracks.AlbumId = albums.AlbumId
+LEFT JOIN media_types
+ON media_types.MediaTypeId = tracks.MediaTypeId
+LEFT JOIN genres
+ON genres.GenreId = tracks.GenreId
+GROUP BY TrackId;
+
+--13. The following query shows the total sales made by each sales agent.
+SELECT employees.Title, employees.FirstName AS 'Employee FirstName',
+employees.LastName AS 'Employee LastName', SUM(invoices.Total) FROM employees
+LEFT JOIN customers
+ON customers.SupportRepId = employees.EmployeeId
+LEFT JOIN invoices
+ON invoices.CustomerId = customers.CustomerId
+WHERE employees.Title LIKE '%Support%Agent%'
+GROUP BY employees.LastName
+ORDER BY employees.LastName;
+
+--14. The following query shows which sales agent made the most dollars in sales in 2009?
+SELECT employees.Title, employees.FirstName AS 'Employee FirstName',
+employees.LastName AS 'Employee LastName',
+SUM(invoices.Total) AS 'Invoices Total Sales' FROM employees
+LEFT JOIN customers
+ON customers.SupportRepId = employees.EmployeeId
+LEFT JOIN invoices
+ON invoices.CustomerId = customers.CustomerId
+WHERE employees.Title LIKE '%Support%Agent%'
+AND invoices.InvoiceDate LIKE '2009%'
+GROUP BY employees.LastName
+ORDER BY 'Invoices Total Sales' ASC LIMIT 1;
+
+
+--15. The following query shows when each of the employees were born.
+SELECT employees.FirstName, employees.LastName, employees.BirthDate
+FROM employees
+ORDER BY employees.BirthDate ASC;
+
+
+--16. The following query shows the length of time for the longest 10 tracks.
+SELECT tracks.Name AS 'Track Name', tracks.Milliseconds
+FROM tracks
+ORDER BY tracks.Milliseconds DESC LIMIT 10;
+
+
+--17. The following query shows what is the length of time for the shortest 10 tracks.
+SELECT tracks.Name AS 'Track Name', tracks.Milliseconds
+FROM tracks
+ORDER BY tracks.Milliseconds ASC LIMIT 10;
+
+--18. The following shows who each employee reports to.
+SELECT emp1.EmployeeId, emp1.Title AS 'Employee Title', emp1.FirstName, emp1.LastName,
+emp1.ReportsTo, emp2.Title AS 'Reports To', emp2.FirstName AS 'Manager FirstName',
+emp2.LastName AS 'Manager LastName'
+FROM employees AS emp1
+INNER JOIN employees AS emp2
+ON emp1.ReportsTo = emp2.EmployeeId
+GROUP BY emp1.EmployeeId
+ORDER BY emp1.EmployeeId;
+
+
+
+
