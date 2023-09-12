@@ -1,0 +1,27 @@
+--The following shows querying information from a sample superstore database.
+
+SELECT SUM(price) AS "Total Spent", item_name FROM superstore
+GROUP BY item_name;
+
+SELECT AVG(price) AS "Average Cost of items" FROM superstore
+
+SELECT MAX(price) AS "Most Expensive Item", item_name FROM superstore;
+
+SELECT MIN(price) AS "Cheapest Item", item_name FROM superstore;
+
+SELECT COUNT(price) AS "Number of Items Sold", item_name FROM superstore
+GROUP BY item_name;
+
+--The following is a SQL query that will show a statistic about the price for items in the category of "Kitchen Supplies". 
+SELECT SUM(price) FROM superstore
+WHERE category = "Kitchen Supplies";
+
+
+--The following SQL query shows how many items are in stock total:
+SELECT SUM(stock_quantity) 
+FROM superstore;
+
+--The following SQL query shows many Smart LED TVs are in stock:
+SELECT SUM(stock_quantity)
+FROM superstore
+WHERE item_name = "Smart LED TV";
